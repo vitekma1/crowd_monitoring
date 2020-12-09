@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 
+i = 0
 count = 0
 cap = cv2.VideoCapture('video3.mp4')
 frame_width = int( cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -22,17 +23,37 @@ while cap.isOpened():
     dilated = cv2.dilate(thresh, None, iterations=3)
     contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
+    points = []
     for contour in contours:
         (x, y, w, h) = cv2.boundingRect(contour)
 
-        print(count)
+        #print(count)
         if cv2.contourArea(contour) < 8000:
             continue
+        cisla = []
+        cislo = -10
+        while (cislo <= 100):
+            cisla.append(cislo)
+            cislo = cislo + 1
+        bool = 1
+        for point in points:
+            for cislo in cisla:
+               for cislo2 in cisla:
+                    if (x+cislo,y+cislo2) == point:
+                     bool = 0
+        if bool==1:
+            points.append((x+100,y+100))
 
 
-        cv2.circle(frame1,(x+100,y+100),250,(0,255,0),2)
-        #cv2.rectangle(frame1, (x-(w), y-30), (x+(w*2), y+(h+60)), (255, 0, 0), 2)
+
+
+    for point in points:
+        cv2.circle(frame1,(point),250,(0,255,0),2)
         count = count + 1
+
+
+        #cv2.rectangle(frame1, (x-(w), y-30), (x+(w*2), y+(h+60)), (255, 0, 0), 2)
+
 
 
     cv2.drawContours(frame1, contours, -1, (0, 0, 255), 2)
@@ -42,9 +63,10 @@ while cap.isOpened():
     cv2.imshow("SMAP", frame1)
     frame1 = frame2
     ret, frame2 = cap.read()
-    cv2.putText(frame1, 'Pocet lidi: '+str(count), (10, 50), cv2.FONT_HERSHEY_SIMPLEX,
+    cv2.putText(frame2, 'Pocet lidi: '+str(count), (10, 50), cv2.FONT_HERSHEY_SIMPLEX,
                 2, (0, 0, 0), 2)
     count = 0
+    points.clear()
     if cv2.waitKey(40) == 27:
         break
 
