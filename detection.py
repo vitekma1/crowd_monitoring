@@ -16,6 +16,7 @@ ret, frame1 = cap.read()
 ret, frame2 = cap.read()
 print(frame1.shape)
 while cap.isOpened():
+
     diff = cv2.absdiff(frame1, frame2)
     gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(gray, (5,5), 0)
@@ -30,6 +31,7 @@ while cap.isOpened():
         #print(count)
         if cv2.contourArea(contour) < 8000:
             continue
+
         cisla = []
         cislo = -10
         while (cislo <= 100):
@@ -49,6 +51,10 @@ while cap.isOpened():
 
     for point in points:
         cv2.circle(frame1,(point),250,(0,255,0),2)
+        for point2 in points:
+            cv2.line(frame1,(point),(point2),(0,0,0),2)
+            cv2.putText(frame1, 'Pozice: '+str(point), (point), cv2.FONT_HERSHEY_SIMPLEX,
+                        1, (255, 0, 0), 2)
         count = count + 1
 
 
