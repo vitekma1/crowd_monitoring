@@ -50,12 +50,20 @@ while cap.isOpened():
 
 
     for point in points:
-        cv2.circle(frame1,(point),250,(0,255,0),2)
+        cv2.circle(frame1,(point),250,(255,0,0),2)
         for point2 in points:
-            cv2.line(frame1,(point),(point2),(0,0,0),2)
-            cv2.putText(frame1, 'Pozice: '+str(point), (point), cv2.FONT_HERSHEY_SIMPLEX,
-                        1, (255, 0, 0), 2)
+
+            if point != point2:
+                if (round((abs((abs(abs(point.__getitem__(0))-abs(point2.__getitem__(0))))/abs(abs(point.__getitem__(1))+abs(point2.__getitem__(1)))))*3,2))>1:
+                    cv2.putText(frame1, str('dobry'), (int((point.__getitem__(0)+point2.__getitem__(0))/2),int((point.__getitem__(1)+point2.__getitem__(1))/2)), cv2.FONT_HERSHEY_SIMPLEX,
+                        1, (0, 255, 0), 2)
+                    cv2.line(frame1,(point),(point2),(0,255,0),2)
+                else:
+                    cv2.putText(frame1,str('spatny'), (int((point.__getitem__(0)+point2.__getitem__(0))/2),int((point.__getitem__(1)+point2.__getitem__(1))/2)), cv2.FONT_HERSHEY_SIMPLEX,
+                                1, (0, 0, 255), 2)
+                    cv2.line(frame1,(point),(point2),(0,0,255),2)
         count = count + 1
+        print((point.__getitem__(0)-point2.__getitem__(0))/(point.__getitem__(1)+point2.__getitem__(1)))
 
 
         #cv2.rectangle(frame1, (x-(w), y-30), (x+(w*2), y+(h+60)), (255, 0, 0), 2)
